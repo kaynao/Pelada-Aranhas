@@ -7,7 +7,7 @@ function adicionarJogo() {
         if (a === b) b = (b + 1) % times.length;
     }
 
-    jogos.push({a, ga:0, gb:0, b});
+    jogos.push({ a, ga: 0, gb: 0, b });
     salvar();
     renderJogos();
 }
@@ -45,13 +45,13 @@ function limparJogos() {
 }
 
 function alterarJogo(i, campo, valor) {
-    jogos[i][campo] = ['a','b'].includes(campo) ? Number(valor) : Math.max(0, Number(valor) || 0);
+    jogos[i][campo] = ['a', 'b'].includes(campo) ? Number(valor) : Math.max(0, Number(valor) || 0);
     salvar();
     atualizarResumo();
 }
 
 function alterarNomeTime(i, valor) {
-    times[i].nome = valor.trim() || `Time ${i+1}`;
+    times[i].nome = valor.trim() || `Time ${i + 1}`;
     salvar();
     renderTimes();
     renderJogos();
@@ -78,16 +78,29 @@ function removerJogador(ti, pi) {
     renderTimes();
 }
 
-// Esconde a tela de entrada após 2 segundos do carregamento da página
+// --- CONTROLE DA TELA DE ENTRADA (SPLASH SCREEN) ---
+function ocultarSplashScreen() {
+    const splash = document.getElementById('splash-screen');
+    if (splash) {
+        splash.classList.add('hidden');
+    }
+}
+
+// Oculta a Splash Screen 2 segundos após o carregamento da página
 window.addEventListener('load', () => {
-    setTimeout(() => {
-        const splash = document.getElementById('splash-screen');
-        if (splash) {
-            splash.classList.add('hidden');
-        }
-    }, 2000); // 2000 milissegundos = 2 segundos
+    setTimeout(ocultarSplashScreen, 2000);
 });
 
-// Inicializa a aplicação
+// Trava de segurança: garante que vai esconder em até 3 segundos se o load demorar
+setTimeout(ocultarSplashScreen, 3000);
+
+// --- INICIALIZAÇÃO DA APLICAÇÃO ---
 renderTimes();
 renderJogos();
+
+// --- ATUALIZAÇÃO DO SERVICE WORKER NO CELULAR ---
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').then((registration) => {
+        registration.update();
+    });
+}
