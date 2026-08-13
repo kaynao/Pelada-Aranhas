@@ -3,101 +3,100 @@
 }
 
 #splash-screen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: linear-gradient(160deg, #0b1d3a 0%, #163628 50%, #27a770 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999; 
-    transition: opacity 0.6s ease, visibility 0.6s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(160deg, #0b1d3a 0%, #163628 50%, #27a770 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; 
+  transition: opacity 0.6s ease, visibility 0.6s ease;
 }
 
-
 .splash-content {
-    text-align: center;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
+  text-align: center;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 }
 
 .splash-logo {
-    font-size: 70px;
-    animation: pulse 1.5s infinite ease-in-out;
+  font-size: 70px;
+  animation: pulse 1.5s infinite ease-in-out;
 }
 
 /* Caso troque o emoji por uma imagem no futuro */
 .splash-logo img {
-    width: 200px;
-    height: 200px;
-    object-fit: contain;
-    filter: drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.4));
-    animation: pulse 2s infinite ease-in-out;
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  filter: drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.4));
+  animation: pulse 2s infinite ease-in-out;
 }
 
 .splash-title {
-    font-size: 30px;
-    font-weight: bold;
-    color: white;
-    letter-spacing: 1px;
-    margin: 0;
-    font-family:exo 2;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  letter-spacing: 1px;
+  margin: 0;
+  font-family: 'Exo 2', sans-serif; /* Corrigida a sintaxe da fonte */
 }
 
 .app-footer {
-    text-align: center;
-    padding: 20px 10px 80px 10px; /* O padding maior na parte inferior garante espaço pra barra de botões do celular */
-    font-size: 13px;
-    color: #888888;
+  text-align: center;
+  padding: 20px 10px 80px 10px; /* O padding maior na parte inferior garante espaço pra barra de botões do celular */
+  font-size: 13px;
+  color: #888888;
 }
 
 .app-footer strong {
-    color: #315c29; /* Cor verde combinando com o tema */
+  color: #315c29; /* Cor verde combinando com o tema */
 }
 
 /* Animaçãozinha de carregamento circular */
 .splash-loader {
-    width: 28px;
-    height: 28px;
-    border: 3px solid rgba(255, 255, 255, 0.3);
-    border-radius: 50%;
-    border-top-color: #ffffff;
-    animation: spin 0.8s linear infinite;
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 0.8s linear infinite;
 }
 
 /* Efeito de sumir suavemente */
 #splash-screen.hidden {
-    opacity: 0;
-    visibility: hidden;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .splash-dev {
-    position: absolute;
-    bottom: 25px;
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 1px;
-    font-weight: 400;
+  position: absolute;
+  bottom: 25px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1px;
+  font-weight: 400;
 }
 
 .splash-dev span {
-    color: #ffffff;
-    font-weight: 600;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 /* Animações */
 @keyframes spin {
-    to { transform: rotate(360deg); }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
 }
 
 body {
@@ -548,167 +547,146 @@ button {
   }
 }
 
-@media (max-width: 600px) {
-  body {
-    padding: 12px;
-  }
-  .times {  
-    grid-template-columns: 1fr;
-  }
-  .titulo-linha {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .jogo {
-    grid-template-columns: 1fr 50px 15px 50px 1fr 72px;
-    gap: 5px;
-    padding: 8px;
-  }
-  .jogo select {
-    font-size: 13px;
-  }
-  .placar {
-    width: 50px;
-  }
-
-  /* --- MELHORIAS PARA ESTILO APP MOBILE --- */
-
 /* Previne seleção acidental de texto e melhora o toque */
 button, select, input {
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 /* Oculta a bottom bar no Desktop por padrão */
 .bottom-bar {
-    display: none;
+  display: none;
 }
 
 /* REGRA MOBILE (Especial para celulares) */
 @media (max-width: 600px) {
-    body {
-        padding: 0;
-        background: #eef4eb;
-        padding-bottom: 75px; /* Garante espaço para a barra inferior fixa não cobrir o conteúdo */
-    }
+  body {
+    padding: 0;
+    background: #eef4eb;
+    padding-bottom: 75px; /* Garante espaço para a barra inferior fixa não cobrir o conteúdo */
+  }
 
-    .app {
-        max-width: 100%;
-    }
+  .app {
+    max-width: 100%;
+  }
 
-    /* Cabeçalho no estilo App Nativo */
-    .app-header {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        background: #315c29;
-        color: white;
-        padding: 14px 16px;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-    }
+  /* Cabeçalho no estilo App Nativo */
+  .app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #315c29;
+    color: white;
+    padding: 14px 16px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  }
 
-    .app-header h1 {
-        font-size: 20px;
-        margin: 0;
-        text-align: center;
-        color: white;
-    }
+  .app-header h1 {
+    font-size: 20px;
+    margin: 0;
+    text-align: center;
+    color: white;
+  }
 
-    .app-body {
-        padding: 12px;
-    }
+  .app-body {
+    padding: 12px;
+  }
 
-    /* Esconde os botões do topo no celular para usar a barra fixa */
-    .acoes-desktop {
-        display: none;
-    }
+  .titulo-linha {
+    align-items: flex-start;
+    flex-direction: column;
+  }
 
-    /* Grade de times em cartões estilo feed */
-    .times {
-        grid-template-columns: 1fr;
-        gap: 14px;
-        margin-bottom: 18px;
-    }
+  /* Esconde os botões do topo no celular para usar a barra fixa */
+  .acoes-desktop {
+    display: none;
+  }
 
-    .time {
-        border-radius: 20px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.06);
-    }
+  /* Grade de times em cartões estilo feed */
+  .times {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
 
-    /* Ajuste da linha do jogo para telas pequenas */
-    .jogo {
-        grid-template-columns: 1fr 48px 12px 48px 1fr 40px;
-        gap: 4px;
-        padding: 8px;
-        border-radius: 16px;
-    }
+  .time {
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  }
 
-    .jogo select {
-        font-size: 14px;
-    }
+  /* Ajuste da linha do jogo para telas pequenas */
+  .jogo {
+    grid-template-columns: 1fr 48px 12px 48px 1fr 40px;
+    gap: 4px;
+    padding: 8px;
+    border-radius: 16px;
+  }
 
-    .placar {
-        width: 48px;
-        height: 38px;
-        font-size: 17px;
-        border-radius: 14px;
-    }
+  .jogo select {
+    font-size: 14px;
+  }
 
-    .save-game {
-        padding: 0 6px;
-        font-size: 11px;
-    }
+  .placar {
+    width: 48px;
+    height: 38px;
+    font-size: 17px;
+    border-radius: 14px;
+  }
 
-    /* Estilização da Barra Inferior Fixa (Estilo App Nativo) */
-    .bottom-bar {
-        display: flex;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 65px;
-        background: #ffffff;
-        border-top: 1px solid #d0e0cc;
-        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
-        z-index: 999;
-        justify-content: space-around;
-        align-items: center;
-        padding: 0 10px;
-    }
+  .save-game {
+    padding: 0 6px;
+    font-size: 11px;
+  }
 
-    .btn-app {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: none;
-        border: none;
-        color: #4a6344;
-        font-size: 11px;
-        font-weight: bold;
-        cursor: pointer;
-        flex: 1;
-        padding: 6px 0;
-        border-radius: 12px;
-        transition: background 0.2s;
-    }
+  /* Estilização da Barra Inferior Fixa (Estilo App Nativo) */
+  .bottom-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 65px;
+    background: #ffffff;
+    border-top: 1px solid #d0e0cc;
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
+    z-index: 999;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 10px;
+  }
 
-    .btn-app:active {
-        background: #eaf3e8;
-    }
+  .btn-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: #4a6344;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1;
+    padding: 6px 0;
+    border-radius: 12px;
+    transition: background 0.2s;
+  }
 
-    .btn-app span {
-        font-size: 20px;
-        margin-bottom: 2px;
-    }
+  .btn-app:active {
+    background: #eaf3e8;
+  }
 
-    .btn-app.primary { color: #23631e; }
-    .btn-app.blue { color: #2b5c8f; }
-    .btn-app.danger { color: #a83c30; }
+  .btn-app span {
+    font-size: 20px;
+    margin-bottom: 2px;
+  }
+
+  .btn-app.primary { color: #23631e; }
+  .btn-app.blue { color: #2b5c8f; }
+  .btn-app.danger { color: #a83c30; }
 }
 
 /* Oculta a barra de botões na hora de gerar o PDF */
 .gerando-pdf .bottom-bar {
-    display: none !important;
-}
+  display: none !important;
 }
