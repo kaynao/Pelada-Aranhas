@@ -78,6 +78,16 @@ function removerJogador(ti, pi) {
     renderTimes();
 }
 
+// Esconde a tela de entrada após 2 segundos do carregamento da página
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash) {
+            splash.classList.add('hidden');
+        }
+    }, 2000); // 2000 milissegundos = 2 segundos
+});
+
 // Inicializa a aplicação
 renderTimes();
 renderJogos();

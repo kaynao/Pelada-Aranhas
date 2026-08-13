@@ -1,104 +1,135 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <!-- Ajustes para telas de celular e prevenção de zoom indesejado -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#315c29">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="theme-color" content="#315c29" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <!-- Conexão com as fontes do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Seu arquivo CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
     <title>Pelada Aranhas - Placar e Times</title>
 
     <!-- Conecta o aplicativo ao arquivo manifest para o celular entender como APP -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="manifest.json" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>"
+    />
+    <link rel="stylesheet" href="css/style.css" />
 
     <!-- Biblioteca html2pdf.js via CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-</head>
-<body>
+  </head>
+  <body>
+    <div id="splash-screen">
+      <div class="splash-content">
+        <!-- Se tiver uma imagem de logo, use <img>. Caso contrário, mantemos o emoji ⚽ grandão -->
+        <div class="splash-logo"><img src="img/logo2.png" alt="Logo Pelada Aranhas"></div>
+        <h1 class="splash-title">Estatísticas Aranhas🕷</h1>
+        <div class="splash-loader"></div>
+      </div>
+      <div class="splash-dev">Desenvolvido por <span>@kaynao</span></div>
+    </div>
     <div class="app" id="app">
-        <!-- Topo no estilo App -->
-        <header class="app-header">
-            <h1>⚽ Pelada Aranhas</h1>
-        </header>
+      <!-- Topo no estilo App -->
+      <header class="app-header">
+        <h1>⚽ Pelada Aranhas</h1>
+      </header>
 
-        <main class="app-body">
-            <section class="times" id="times"></section>
+      <main class="app-body">
+        <section class="times" id="times"></section>
 
-            <section class="placar-box">
-                <div class="titulo-linha">
-                    <h2>📋 Confrontos & Placar</h2>
-                    <!-- Botões para Computador/Desktop -->
-                    <div class="acoes-desktop">
-                        <button class="btn blue" onclick="gerarPDF()">📄 PDF</button>
-                        <button class="btn" onclick="adicionarJogo()">＋ Adicionar jogo</button>
-                        <button class="btn red" onclick="limparJogos()">↺ Limpar</button>
-                    </div>
-                </div>
+        <section class="placar-box">
+          <div class="titulo-linha">
+            <h2>📋 Confrontos & Placar</h2>
+            <!-- Botões para Computador/Desktop -->
+            <div class="acoes-desktop">
+              <button class="btn blue" onclick="gerarPDF()">📄 PDF</button>
+              <button class="btn" onclick="adicionarJogo()">
+                ＋ Adicionar jogo
+              </button>
+              <button class="btn red" onclick="limparJogos()">↺ Limpar</button>
+            </div>
+          </div>
 
-                <div id="jogos"></div>
+          <div id="jogos"></div>
 
-                <div class="resumo">
-                    <div class="resumo-cabecalho">
-                        <div>
-                            <h3>📊 Resumo da pelada</h3>
-                            <p>Classificação e desempenho dos times</p>
-                        </div>
-                    </div>
+          <div class="resumo">
+            <div class="resumo-cabecalho">
+              <div>
+                <h3>📊 Resumo da pelada</h3>
+                <p>Classificação e desempenho dos times</p>
+              </div>
+            </div>
 
-                    <div class="tabela-container">
-                        <table class="tabela-resumo">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Time</th>
-                                    <th>PTS</th>
-                                    <th>J</th>
-                                    <th>V</th>
-                                    <th>E</th>
-                                    <th>D</th>
-                                    <th>GP</th>
-                                    <th>GC</th>
-                                    <th>SG</th>
-                                </tr>
-                            </thead>
-                            <tbody id="resumo"></tbody>
-                        </table>
+            <div class="tabela-container">
+              <table class="tabela-resumo">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Time</th>
+                    <th>PTS</th>
+                    <th>J</th>
+                    <th>V</th>
+                    <th>E</th>
+                    <th>D</th>
+                    <th>GP</th>
+                    <th>GC</th>
+                    <th>SG</th>
+                  </tr>
+                </thead>
+                <tbody id="resumo"></tbody>
+              </table>
 
-                        <!-- Legenda da Tabela -->
-                        <div class="tabela-legenda">
-                            <span><b>PTS:</b> Pontos</span>
-                            <span><b>J:</b> Jogos</span>
-                            <span><b>V:</b> Vitórias</span>
-                            <span><b>E:</b> Empates</span>
-                            <span><b>D:</b> Derrotas</span>
-                            <span><b>GP:</b> Gols Pró</span>
-                            <span><b>GC:</b> Gols Contra</span>
-                            <span><b>SG:</b> Saldo de Gols</span>
-                        </div>
-                    </div>
-                </div>
-            </section>
-        </main>
+              <!-- Legenda da Tabela -->
+              <div class="tabela-legenda">
+                <span><b>PTS:</b> Pontos</span>
+                <span><b>J:</b> Jogos</span>
+                <span><b>V:</b> Vitórias</span>
+                <span><b>E:</b> Empates</span>
+                <span><b>D:</b> Derrotas</span>
+                <span><b>GP:</b> Gols Pró</span>
+                <span><b>GC:</b> Gols Contra</span>
+                <span><b>SG:</b> Saldo de Gols</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
 
-        <!-- Barra Inferior de Botões (Estilo App de Celular) -->
-        <nav class="bottom-bar">
-            <button class="btn-app primary" onclick="adicionarJogo()">
-                <span>＋</span>
-                <label>Novo Jogo</label>
-            </button>
-            <button class="btn-app blue" onclick="gerarPDF()">
-                <span>📄</span>
-                <label>PDF</label>
-            </button>
-            <button class="btn-app danger" onclick="limparJogos()">
-                <span>↺</span>
-                <label>Limpar</label>
-            </button>
-        </nav>
+      <!-- Barra Inferior de Botões (Estilo App de Celular) -->
+      <nav class="bottom-bar">
+        <button class="btn-app primary" onclick="adicionarJogo()">
+          <span>＋</span>
+          <label>Novo Jogo</label>
+        </button>
+        <button class="btn-app blue" onclick="gerarPDF()">
+          <span>📄</span>
+          <label>PDF</label>
+        </button>
+        <button class="btn-app danger" onclick="limparJogos()">
+          <span>↺</span>
+          <label>Limpar</label>
+        </button>
+      </nav>
+      <footer class="app-footer">
+            <p>Desenvolvido com ⚽ por <strong>@kaynao</strong></p>
+        </footer>
     </div>
 
     <!-- Scripts do Sistema -->
@@ -109,11 +140,12 @@
 
     <!-- Script que salva o aplicativo no celular para rodar Offline -->
     <script>
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('./sw.js')
-          .then(() => console.log('App pronto para rodar offline!'))
-          .catch(err => console.log('Erro no ServiceWorker:', err));
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("./sw.js")
+          .then(() => console.log("App pronto para rodar offline!"))
+          .catch((err) => console.log("Erro no ServiceWorker:", err));
       }
     </script>
-</body>
+  </body>
 </html>

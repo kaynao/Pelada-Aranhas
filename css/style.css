@@ -2,6 +2,104 @@
   box-sizing: border-box;
 }
 
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(160deg, #0b1d3a 0%, #163628 50%, #27a770 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; 
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+
+.splash-content {
+    text-align: center;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.splash-logo {
+    font-size: 70px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Caso troque o emoji por uma imagem no futuro */
+.splash-logo img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    filter: drop-shadow(0px 8px 16px rgba(0, 0, 0, 0.4));
+    animation: pulse 2s infinite ease-in-out;
+}
+
+.splash-title {
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    letter-spacing: 1px;
+    margin: 0;
+    font-family:exo 2;
+}
+
+.app-footer {
+    text-align: center;
+    padding: 20px 10px 80px 10px; /* O padding maior na parte inferior garante espaço pra barra de botões do celular */
+    font-size: 13px;
+    color: #888888;
+}
+
+.app-footer strong {
+    color: #315c29; /* Cor verde combinando com o tema */
+}
+
+/* Animaçãozinha de carregamento circular */
+.splash-loader {
+    width: 28px;
+    height: 28px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffffff;
+    animation: spin 0.8s linear infinite;
+}
+
+/* Efeito de sumir suavemente */
+#splash-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.splash-dev {
+    position: absolute;
+    bottom: 25px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 1px;
+    font-weight: 400;
+}
+
+.splash-dev span {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* Animações */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
 body {
   margin: 0;
   padding: 24px;
