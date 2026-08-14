@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pelada Aranhas - Placar e Times</title>
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
+
+<!-- Biblioteca html2pdf.js via CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+    * { box-sizing: border-box; }
+    body {
+        margin: 0;
+        padding: 24px;
+        font-family: Arial, Helvetica, sans-serif;
+        background: #edf4e7;
+        color: #123d13;
+    }
+
+    .bolinha-time {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        margin-right: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.2); 
+        vertical-align: middle;
+    }
+    
+    .bolinha-time.amarelo { background-color: #f5d72f; }
+    .bolinha-time.azul    { background-color: #397dd0; }
+    .bolinha-time.verde   { background-color: #39a34b; }
+    .bolinha-time.vermelho{ background-color: #d94b3b; }
+
+    .app {
+        max-width: 1050px;
+        margin: auto;
+    }
+
+    h1 {
+        margin: 0 0 22px;
+        font-size: 30px;
+        color: #123d13;
+    }
+
+    .times {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 28px;
+    }
+
+    .time {
+        background: #f8fbf5;
+        border: 3px solid #315c29;
+        border-radius: 28px;
+        overflow: hidden;
+        box-shadow: 0 7px 0 #244c21;
+    }
+
+    .time-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 13px 16px;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .amarelo .time-header { background: #f5d72f; color: #151515; }
+    .azul .time-header { background: #397dd0; color: white; }
+    .verde .time-header { background: #39a34b; color: #111; }
+    .vermelho .time-header { background: #d94b3b; color: white; }
+
+    .badge {
+        background: #ffe08a;
+        color: #222;
+        border-radius: 18px;
+        padding: 4px 10px;
+        font-size: 13px;
+    }
+
+    .team-name {
+        width: 70%;
+        border: 0;
+        background: transparent;
+        font-size: 18px;
+        font-weight: bold;
+        outline: none;
+        color: inherit;
+    }
+
+    .players {
+        padding: 10px 14px 14px;
+    }
+
+    .player {
+        display: flex;
+        gap: 6px;
+        margin: 7px 0;
+    }
+
+    .player input {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #b7cfaa;
+        border-radius: 22px;
+        background: #eef5ea;
+        font-size: 14px;
+        outline: none;
+    }
+
+    .remove-player {
+        width: 34px;
+        border: 0;
+        border-radius: 50%;
+        background: #c94a3b;
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .add-player {
+        width: 100%;
+        margin-top: 5px;
+        padding: 8px;
+        border: 1px solid #9cbb91;
+        border-radius: 18px;
+        background: #dcebd5;
+        color: #174b18;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .placar-box {
+        background: #dce8d4;
+        border: 3px solid #315c29;
+        border-radius: 28px;
+        padding: 24px;
+    }
+
+    .titulo-linha {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 16px;
+    }
+
+    .titulo-linha h2 {
+        margin: 0;
+        font-size: 25px;
+    }
+
+    button {
+        font-family: inherit;
+        font-weight: bold;
+    }
+
+    .btn {
+        border: 2px solid #173e17;
+        border-radius: 18px;
+        padding: 10px 17px;
+        cursor: pointer;
+        color: white;
+        background: #23631e;
+        box-shadow: 0 3px 0 #143c15;
+    }
+
+    .btn.blue {
+        background: #2b5c8f;
+        border-color: #183759;
+        box-shadow: 0 3px 0 #122842;
+    }
+
+    .btn.red {
+        background: #a83c30;
+        border-color: #71291f;
+    }
+
+    .jogo {
+        display: grid;
+        grid-template-columns: 1fr 55px 18px 55px 1fr 76px;
+        align-items: center;
+        gap: 10px;
+        background: #fff;
+        border: 2px solid #79a56d;
+        border-radius: 20px;
+        padding: 9px 12px;
+        margin: 9px 0;
+        box-shadow: 0 2px 0 #587b50;
+    }
+
+    .jogo select {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        font-size: 16px;
+        font-weight: bold;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .placar {
+        width: 55px;
+        height: 40px;
+        text-align: center;
+        border: 2px solid #315c29;
+        border-radius: 20px;
+        background: #f7faf4;
+        font-size: 19px;
+        font-weight: bold;
+        outline: none;
+    }
+
+    .x {
+        font-size: 22px;
+        text-align: center;
+    }
+
+    .acoes-jogo {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 6px;
+    }
+
+    .save-game {
+        height: 34px;
+        padding: 0 10px;
+        border: 2px solid #173e17;
+        border-radius: 17px;
+        background: #23631e;
+        color: white;
+        font-size: 12px;
+        font-weight: 800;
+        cursor: pointer;
+        box-shadow: 0 2px 0 #143c15;
+        transition: .15s;
+    }
+
+    .save-game:hover {
+        transform: translateY(-1px);
+        background: #2d7628;
+    }
+
+    .save-game.saved {
+        background: #5f8f55;
+        border-color: #416d3a;
+    }
+
+    .remove-game {
+        width: 34px;
+        height: 34px;
+        border: 0;
+        border-radius: 50%;
+        background: #c94a3b;
+        color: white;
+        font-size: 23px;
+        cursor: pointer;
+    }
+
+    .vazio {
+        text-align: center;
+        padding: 25px;
+        color: #52704d;
+        font-weight: bold;
+    }
+
+    .resumo {
+        margin-top: 24px;
+        background: #f8fbf5;
+        border: 2px solid #9fbd94;
+        border-radius: 22px;
+        padding: 20px;
+        box-shadow: 0 3px 0 rgba(49, 92, 41, 0.12);
+    }
+
+    .resumo-cabecalho {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 16px;
+    }
+
+    .resumo h3 {
+        margin: 0;
+        font-size: 21px;
+        color: #173f18;
+    }
+
+    .resumo-cabecalho p {
+        margin: 4px 0 0;
+        color: #6a7d65;
+        font-size: 13px;
+    }
+
+    .tabela-container {
+        overflow-x: auto;
+        border: 1px solid #c4d7bd;
+        border-radius: 16px;
+    }
+
+    .tabela-resumo {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 650px;
+        overflow: hidden;
+    }
+
+    .tabela-resumo th {
+        padding: 12px 10px;
+        background: #315c29;
+        color: white;
+        font-size: 12px;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+        text-align: center;
+    }
+
+    .tabela-resumo th:nth-child(2) {
+        text-align: left;
+    }
+
+    .tabela-resumo td {
+        padding: 12px 10px;
+        border-bottom: 1px solid #dce7d8;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .tabela-resumo td:nth-child(2) {
+        text-align: left;
+        font-size: 15px;
+    }
+
+    .tabela-resumo tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .tabela-resumo tbody tr:nth-child(even) {
+        background: #f0f6ed;
+    }
+
+    .tabela-resumo tbody tr:hover {
+        background: #e5f0e1;
+    }
+
+    .posicao {
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #e4efdf;
+        color: #315c29;
+        font-weight: 800;
+    }
+
+    .lider .posicao {
+        background: #f5d72f;
+        color: #2d351d;
+    }
+
+    .pontos {
+        font-size: 16px;
+        color: #173f18;
+        font-weight: 800;
+    }
+
+    .saldo-positivo { color: #28702a; }
+    .saldo-negativo { color: #b33c32; }
+
+    /* Estilos de PDF */
+    .gerando-pdf .remove-player,
+    .gerando-pdf .add-player,
+    .gerando-pdf .acoes-jogo,
+    .gerando-pdf .btn {
+        display: none !important;
+    }
+
+    .gerando-pdf .jogo {
+        grid-template-columns: 1fr 55px 18px 55px 1fr;
+    }
+
+    .gerando-pdf .time,
+    .gerando-pdf .jogo,
+    .gerando-pdf .resumo,
+    .gerando-pdf .tabela-resumo tr {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+    }
+
+    .gerando-pdf .tabela-container {
+        overflow: visible !important;
+    }
+
+    .gerando-pdf .tabela-resumo {
+        min-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .gerando-pdf .tabela-resumo th,
+    .gerando-pdf .tabela-resumo td {
+        padding: 8px 4px !important;
+        font-size: 12px !important;
+    }
+
+    @media (max-width: 850px) {
+        .times { grid-template-columns: repeat(2, 1fr); }
+        .tabela-resumo { min-width: 620px; }
+    }
+
+    @media (max-width: 600px) {
+        body { padding: 12px; }
+        .times { grid-template-columns: 1fr; }
+        .titulo-linha { align-items: flex-start; flex-direction: column; }
+        .jogo {
+            grid-template-columns: 1fr 50px 15px 50px 1fr 72px;
+            gap: 5px;
+            padding: 8px;
+        }
+        .jogo select { font-size: 13px; }
+        .placar { width: 50px; }
+    }
+</style>
+</head>
+<body>
+<div class="app" id="app">
+    <h1>⚽ Estatísticas da Pelada Aranhas</h1>
+
+    <section class="times" id="times"></section>
+
+    <section class="placar-box">
+        <div class="titulo-linha">
+            <h2>📋 Confrontos & Placar</h2>
+            <div>
+                <button class="btn blue" onclick="gerarPDF()">📄 Baixar PDF</button>
+                <button class="btn" onclick="adicionarJogo()">＋ Adicionar jogo</button>
+                <button class="btn red" onclick="limparJogos()">↺ Limpar jogos</button>
+            </div>
+        </div>
+
+        <div id="jogos"></div>
+
+        <div class="resumo">
+            <div class="resumo-cabecalho">
+                <div>
+                    <h3>📊 Resumo da pelada</h3>
+                    <p>Classificação e desempenho dos times</p>
+                </div>
+            </div>
+
+            <div class="tabela-container">
+                <table class="tabela-resumo">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Time</th>
+                            <th>PTS</th>
+                            <th>J</th>
+                            <th>V</th>
+                            <th>E</th>
+                            <th>D</th>
+                            <th>GP</th>
+                            <th>GC</th>
+                            <th>SG</th>
+                        </tr>
+                    </thead>
+                    <tbody id="resumo"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+const cores = ['amarelo', 'azul', 'verde', 'vermelho'];
+const emojisBolinha = ['🟡', '🔵', '🟢', '🔴']; // Emojis que representam a cor de cada time
+
+let times = JSON.parse(localStorage.getItem('pelada_times')) || [
+    { nome: 'Amarelo', jogadores: ['Ronaldo','Rivaldo','Ronaldinho','Kaká','Neymar'] },
+    { nome: 'Azul', jogadores: ['Messi','Di María','Agüero','Tevez','Maradona'] },
+    { nome: 'Verde', jogadores: ['Cristiano','Figo','Eusébio','Rui Costa','Pepe'] },
+    { nome: 'Vermelho', jogadores: ['Zidane','Mbappé','Griezmann','Benzema','Henry'] }
+];
+
+let jogos = JSON.parse(localStorage.getItem('pelada_jogos')) || [
+    {a:0, ga:3, gb:2, b:1},
+    {a:2, ga:1, gb:4, b:3},
+    {a:0, ga:0, gb:0, b:2},
+    {a:1, ga:2, gb:2, b:3}
+];
+
+function salvar() {
+    localStorage.setItem('pelada_times', JSON.stringify(times));
+    localStorage.setItem('pelada_jogos', JSON.stringify(jogos));
+}
+
+function renderTimes() {
+    const area = document.getElementById('times');
+    area.innerHTML = '';
+
+    times.forEach((time, ti) => {
+        const card = document.createElement('div');
+        card.className = 'time ' + cores[ti];
+
+        card.innerHTML = `
+            <div class="time-header">
+                <input class="team-name" value="${escapeHtml(time.nome)}"
+                    onchange="alterarNomeTime(${ti}, this.value)">
+                <span class="badge">${time.jogadores.length}/5</span>
+            </div>
+            <div class="players">
+                ${time.jogadores.map((p, pi) => `
+                    <div class="player">
+                        <input value="${escapeHtml(p)}"
+                            onchange="alterarJogador(${ti}, ${pi}, this.value)"
+                            placeholder="Nome do jogador">
+                        <button class="remove-player" onclick="removerJogador(${ti}, ${pi})">×</button>
+                    </div>
+                `).join('')}
+                <button class="add-player" onclick="adicionarJogador(${ti})">＋ Adicionar jogador</button>
+            </div>
+        `;
+        area.appendChild(card);
+    });
+}
+
+function renderJogos() {
+    const area = document.getElementById('jogos');
+
+    if (!jogos.length) {
+        area.innerHTML = '<div class="vazio">Nenhum jogo anotado. Clique em “Adicionar jogo”.</div>';
+        atualizarResumo();
+        return;
+    }
+
+    area.innerHTML = jogos.map((jogo, i) => `
+        <div class="jogo">
+            <select onchange="alterarJogo(${i}, 'a', this.value)">
+                ${opcoesTimes(jogo.a)}
+            </select>
+
+            <input class="placar" type="number" min="0" value="${jogo.ga}"
+                onchange="alterarJogo(${i}, 'ga', this.value)">
+
+            <span class="x">×</span>
+
+            <input class="placar" type="number" min="0" value="${jogo.gb}"
+                onchange="alterarJogo(${i}, 'gb', this.value)">
+
+            <select onchange="alterarJogo(${i}, 'b', this.value)">
+                ${opcoesTimes(jogo.b)}
+            </select>
+
+            <div class="acoes-jogo">
+                <button class="save-game" id="save-${i}" onclick="salvarJogo(${i})">Salvar</button>
+                <button class="remove-game" onclick="removerJogo(${i})">×</button>
+            </div>
+        </div>
+    `).join('');
+
+    atualizarResumo();
+}
+
+// Adicionada a bolinha colorida (emoji) no texto das opções
+function opcoesTimes(selecionado) {
+    return times.map((t, i) =>
+        `<option value="${i}" ${Number(selecionado) === i ? 'selected' : ''}>
+            ${emojisBolinha[i] || '⚪'} ${escapeHtml(t.nome)}
+        </option>`
+    ).join('');
+}
+
+function adicionarJogo() {
+    let a = 0, b = 1;
+    if (jogos.length) {
+        const ultimo = jogos[jogos.length - 1];
+        a = ultimo.b;
+        b = (ultimo.b + 1) % times.length;
+        if (a === b) b = (b + 1) % times.length;
+    }
+
+    jogos.push({a, ga:0, gb:0, b});
+    salvar();
+    renderJogos();
+}
+
+function salvarJogo(i) {
+    salvar();
+
+    const botao = document.getElementById(`save-${i}`);
+    if (botao) {
+        botao.textContent = '✓ Salvo';
+        botao.classList.add('saved');
+
+        setTimeout(() => {
+            if (botao) {
+                botao.textContent = 'Salvar';
+                botao.classList.remove('saved');
+            }
+        }, 1200);
+    }
+
+    atualizarResumo();
+}
+
+function removerJogo(i) {
+    jogos.splice(i, 1);
+    salvar();
+    renderJogos();
+}
+
+function limparJogos() {
+    if (!confirm('Tem certeza que deseja apagar todos os jogos?')) return;
+    jogos = [];
+    salvar();
+    renderJogos();
+}
+
+function alterarJogo(i, campo, valor) {
+    jogos[i][campo] = ['a','b'].includes(campo) ? Number(valor) : Math.max(0, Number(valor) || 0);
+    salvar();
+    atualizarResumo();
+}
+
+function alterarNomeTime(i, valor) {
+    times[i].nome = valor.trim() || `Time ${i+1}`;
+    salvar();
+    renderTimes();
+    renderJogos();
+}
+
+function alterarJogador(ti, pi, valor) {
+    times[ti].jogadores[pi] = valor;
+    salvar();
+}
+
+function adicionarJogador(ti) {
+    if (times[ti].jogadores.length >= 5) {
+        alert('Cada time pode ter até 5 jogadores neste modelo.');
+        return;
+    }
+    times[ti].jogadores.push('');
+    salvar();
+    renderTimes();
+}
+
+function removerJogador(ti, pi) {
+    times[ti].jogadores.splice(pi, 1);
+    salvar();
+    renderTimes();
+}
+
+function atualizarResumo() {
+    const stats = times.map((t, i) => ({
+        indexOriginal: i,
+        nome: t.nome,
+        jogos: 0,
+        v: 0,
+        e: 0,
+        d: 0,
+        gp: 0,
+        gc: 0,
+        pts: 0
+    }));
+
+    jogos.forEach(j => {
+        const a = Number(j.a), b = Number(j.b);
+        const ga = Number(j.ga) || 0, gb = Number(j.gb) || 0;
+
+        if (!stats[a] || !stats[b] || a === b) return;
+
+        stats[a].jogos++;
+        stats[b].jogos++;
+        stats[a].gp += ga;
+        stats[a].gc += gb;
+        stats[b].gp += gb;
+        stats[b].gc += ga;
+
+        if (ga > gb) {
+            stats[a].v++;
+            stats[b].d++;
+            stats[a].pts += 3;
+        } else if (gb > ga) {
+            stats[b].v++;
+            stats[a].d++;
+            stats[b].pts += 3;
+        } else {
+            stats[a].e++;
+            stats[b].e++;
+            stats[a].pts++;
+            stats[b].pts++;
+        }
+    });
+
+    stats.sort((a, b) => {
+        const saldoA = a.gp - a.gc;
+        const saldoB = b.gp - b.gc;
+        return b.pts - a.pts || saldoB - saldoA || b.gp - a.gp;
+    });
+
+    document.getElementById('resumo').innerHTML = stats.map((s, index) => {
+        const saldo = s.gp - s.gc;
+        const saldoTexto = saldo > 0 ? `+${saldo}` : saldo;
+
+        return `
+            <tr class="${index === 0 && s.jogos > 0 ? 'lider' : ''}">
+                <td><span class="posicao">${index + 1}</span></td>
+                <td>
+                    <span class="bolinha-time ${cores[s.indexOriginal]}"></span>
+                    ${escapeHtml(s.nome)}
+                </td>
+                <td class="pontos">${s.pts}</td>
+                <td>${s.jogos}</td>
+                <td>${s.v}</td>
+                <td>${s.e}</td>
+                <td>${s.d}</td>
+                <td>${s.gp}</td>
+                <td>${s.gc}</td>
+                <td class="${saldo > 0 ? 'saldo-positivo' : saldo < 0 ? 'saldo-negativo' : ''}">
+                    ${saldoTexto}
+                </td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function escapeHtml(text) {
+    return String(text)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+}
+
+function gerarPDF() {
+    const elemento = document.getElementById('app');
+    elemento.classList.add('gerando-pdf');
+
+    const opcoes = {
+        margin:       10,
+        filename:     'Estatisticas_da_Pelada.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] }
+    };
+
+    html2pdf().set(opcoes).from(elemento).save().then(() => {
+        elemento.classList.remove('gerando-pdf');
+    });
+}
+
+renderTimes();
+renderJogos();
+</script>
+</body>
+</html>
